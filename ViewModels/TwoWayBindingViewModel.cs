@@ -6,7 +6,20 @@ namespace WpfLab2.ViewModels
 {
     public partial class TwoWayBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
+
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public TwoWayBindingViewModel()
+        {
+            _person = new Person();
+        }
 
         [RelayCommand]
         private void Reset()

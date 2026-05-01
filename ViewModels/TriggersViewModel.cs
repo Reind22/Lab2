@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WpfLab2.Models;
 
@@ -5,18 +6,36 @@ namespace WpfLab2.ViewModels
 {
     public partial class TriggersViewModel : ObservableObject
     {
-        public Person Person { get; }
+        private Person _person;
 
-        public bool IsAdultAndActive => Person.IsActive && Person.Age >= 18;
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public bool IsAdultAndActive
+        {
+            get
+            {
+                return Person.IsActive && Person.Age >= 18;
+            }
+        }
 
         public TriggersViewModel()
         {
-            Person = new Person();
-            Person.PropertyChanged += (_, e) =>
+            _person = new Person();
+            _person.PropertyChanged += Person_PropertyChanged;
+        }
+
+        private void Person_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Age" || e.PropertyName == "IsActive")
             {
-                if (e.PropertyName == nameof(Person.Age) || e.PropertyName == nameof(Person.IsActive))
-                    OnPropertyChanged(nameof(IsAdultAndActive));
-            };
+                OnPropertyChanged("IsAdultAndActive");
+            }
         }
     }
 }

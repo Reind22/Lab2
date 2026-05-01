@@ -13,8 +13,11 @@ namespace WpfLab2.Views
 
         private void ApplyRole_Click(object sender, RoutedEventArgs e)
         {
-            BindingExpression? be = RoleBox.GetBindingExpression(TextBox.TextProperty);
-            be?.UpdateSource();
+            BindingExpression be = RoleBox.GetBindingExpression(TextBox.TextProperty);
+            if (be != null)
+            {
+                be.UpdateSource();
+            }
         }
     }
 }

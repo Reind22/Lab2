@@ -1,3 +1,4 @@
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WpfLab2.Models;
@@ -6,7 +7,20 @@ namespace WpfLab2.ViewModels
 {
     public partial class DefaultBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
+
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public DefaultBindingViewModel()
+        {
+            _person = new Person();
+        }
 
         [RelayCommand]
         private void Reset()
@@ -18,7 +32,8 @@ namespace WpfLab2.ViewModels
         [RelayCommand]
         private void RandomizeAge()
         {
-            Person.Age = new System.Random().Next(18, 80);
+            Random random = new Random();
+            Person.Age = random.Next(18, 80);
         }
     }
 }

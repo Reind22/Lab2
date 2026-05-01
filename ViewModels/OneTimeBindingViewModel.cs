@@ -6,12 +6,32 @@ namespace WpfLab2.ViewModels
 {
     public partial class OneTimeBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
+
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public OneTimeBindingViewModel()
+        {
+            _person = new Person();
+        }
 
         [RelayCommand]
         private void ChangeName()
         {
-            Person.Name = Person.Name == "Иван" ? "Пётр" : "Иван";
+            if (Person.Name == "Иван")
+            {
+                Person.Name = "Пётр";
+            }
+            else
+            {
+                Person.Name = "Иван";
+            }
         }
     }
 }

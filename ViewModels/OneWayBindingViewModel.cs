@@ -7,13 +7,26 @@ namespace WpfLab2.ViewModels
 {
     public partial class OneWayBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
+
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public OneWayBindingViewModel()
+        {
+            _person = new Person();
+        }
 
         [RelayCommand]
         private void ShowEmail()
         {
-            MessageBox.Show($"Текущий Email в ViewModel: {Person.Email}",
-                "OneWayToSource", MessageBoxButton.OK, MessageBoxImage.Information);
+            string message = "Текущий Email в ViewModel: " + Person.Email;
+            MessageBox.Show(message, "OneWayToSource", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         [RelayCommand]
