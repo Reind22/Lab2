@@ -6,24 +6,36 @@ namespace WpfLab2.ViewModels
 {
     public class OneWayBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
 
-        public ICommand ShowEmailCommand { get; }
-        public ICommand ResetCommand { get; }
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public ICommand ShowEmailCommand { get; private set; }
+        public ICommand ResetCommand { get; private set; }
 
         public OneWayBindingViewModel()
         {
-            ShowEmailCommand = new RelayCommand(() =>
-            {
-                MessageBox.Show($"Текущий Email в ViewModel: {Person.Email}",
-                    "OneWayToSource", MessageBoxButton.OK, MessageBoxImage.Information);
-            });
+            _person = new Person();
+            ShowEmailCommand = new RelayCommand(ShowEmail);
+            ResetCommand = new RelayCommand(Reset);
+        }
 
-            ResetCommand = new RelayCommand(() =>
-            {
-                Person.Age = 20;
-                Person.Email = "ivan@example.com";
-            });
+        private void ShowEmail()
+        {
+            string message = "Текущий Email в ViewModel: " + Person.Email;
+            MessageBox.Show(message, "OneWayToSource", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void Reset()
+        {
+            Person.Age = 20;
+            Person.Email = "ivan@example.com";
         }
     }
 }

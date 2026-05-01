@@ -10,10 +10,84 @@ namespace WpfLab2.Models
         private bool _isActive = true;
         private string _role = "Пользователь";
 
-        public string Name { get => _name; set => SetProperty(ref _name, value); }
-        public int Age { get => _age; set => SetProperty(ref _age, value); }
-        public string Email { get => _email; set => SetProperty(ref _email, value); }
-        public bool IsActive { get => _isActive; set => SetProperty(ref _isActive, value); }
-        public string Role { get => _role; set => SetProperty(ref _role, value); }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged("Name");
+                }
+            }
+        }
+
+        public int Age
+        {
+            get
+            {
+                return _age;
+            }
+            set
+            {
+                if (_age != value)
+                {
+                    _age = value;
+                    OnPropertyChanged("Age");
+                }
+            }
+        }
+
+        public string Email
+        {
+            get
+            {
+                return _email;
+            }
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged("Email");
+                }
+            }
+        }
+
+        public bool IsActive
+        {
+            get
+            {
+                return _isActive;
+            }
+            set
+            {
+                if (_isActive != value)
+                {
+                    _isActive = value;
+                    OnPropertyChanged("IsActive");
+                }
+            }
+        }
+
+        public string Role
+        {
+            get
+            {
+                return _role;
+            }
+            set
+            {
+                if (_role != value)
+                {
+                    _role = value;
+                    OnPropertyChanged("Role");
+                }
+            }
+        }
     }
 }

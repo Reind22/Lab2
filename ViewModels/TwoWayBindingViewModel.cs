@@ -5,19 +5,30 @@ namespace WpfLab2.ViewModels
 {
     public class TwoWayBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
 
-        public ICommand ResetCommand { get; }
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public ICommand ResetCommand { get; private set; }
 
         public TwoWayBindingViewModel()
         {
-            ResetCommand = new RelayCommand(() =>
-            {
-                Person.Name = "Иван";
-                Person.Email = "ivan@example.com";
-                Person.Age = 20;
-                Person.IsActive = true;
-            });
+            _person = new Person();
+            ResetCommand = new RelayCommand(Reset);
+        }
+
+        private void Reset()
+        {
+            Person.Name = "Иван";
+            Person.Email = "ivan@example.com";
+            Person.Age = 20;
+            Person.IsActive = true;
         }
     }
 }

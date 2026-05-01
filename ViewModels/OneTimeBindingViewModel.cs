@@ -5,16 +5,34 @@ namespace WpfLab2.ViewModels
 {
     public class OneTimeBindingViewModel : ObservableObject
     {
-        public Person Person { get; } = new Person();
+        private Person _person;
 
-        public ICommand ChangeNameCommand { get; }
+        public Person Person
+        {
+            get
+            {
+                return _person;
+            }
+        }
+
+        public ICommand ChangeNameCommand { get; private set; }
 
         public OneTimeBindingViewModel()
         {
-            ChangeNameCommand = new RelayCommand(() =>
+            _person = new Person();
+            ChangeNameCommand = new RelayCommand(ChangeName);
+        }
+
+        private void ChangeName()
+        {
+            if (Person.Name == "Иван")
             {
-                Person.Name = Person.Name == "Иван" ? "Пётр" : "Иван";
-            });
+                Person.Name = "Пётр";
+            }
+            else
+            {
+                Person.Name = "Иван";
+            }
         }
     }
 }
