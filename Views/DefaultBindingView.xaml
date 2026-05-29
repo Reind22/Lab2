@@ -1,8 +1,66 @@
 <UserControl x:Class="WpfLab2.Views.DefaultBindingView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <TextBlock Text="Привязка по умолчанию (скелет)" Style="{StaticResource H1Text}"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:WpfLab2.ViewModels">
+    <UserControl.DataContext>
+        <vm:DefaultBindingViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <TextBlock Text="Привязка по умолчанию (Mode=Default)" Style="{StaticResource H1Text}"/>
+            <TextBlock Style="{StaticResource CaptionText}"
+                       TextWrapping="Wrap"
+                       Text="Режим Default зависит от свойства: у TextBox.Text это TwoWay, у TextBlock.Text — OneWay. Ниже показано две колонки: слева — привязка напрямую к элементам UI через ElementName, справа — через ViewModel."/>
+
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ЛЕВАЯ КОЛОНКА: прямая привязка ElementName -->
+                <Border Style="{StaticResource ColumnCard}" Grid.Column="0">
+                    <StackPanel>
+                        <TextBlock Text="Прямая привязка (ElementName)" Style="{StaticResource H2Text}"/>
+
+                        <TextBlock Text="Введите имя:"/>
+                        <TextBox x:Name="NameBox" Text="Иван"/>
+
+                        <TextBlock Text="Отражение:"/>
+                        <TextBlock Text="{Binding ElementName=NameBox, Path=Text}"
+                                   FontWeight="SemiBold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+
+                        <TextBlock Text="Возраст (Slider):" Margin="4,10,4,4"/>
+                        <Slider x:Name="AgeSlider" Minimum="0" Maximum="100" Value="20"/>
+                        <TextBlock Text="{Binding ElementName=AgeSlider, Path=Value, StringFormat='Значение: {0:F0}'}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ПРАВАЯ КОЛОНКА: через ViewModel -->
+                <Border Style="{StaticResource ColumnCard}" Grid.Column="1">
+                    <StackPanel>
+                        <TextBlock Text="Через ViewModel (Person)" Style="{StaticResource H2Text}"/>
+
+                        <TextBlock Text="Имя:"/>
+                        <TextBox Text="{Binding Person.Name}"/>
+
+                        <TextBlock Text="Отражение из VM:"/>
+                        <TextBlock Text="{Binding Person.Name}"
+                                   FontWeight="SemiBold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+
+                        <TextBlock Text="Возраст:" Margin="4,10,4,4"/>
+                        <Slider Value="{Binding Person.Age}" Minimum="0" Maximum="100"/>
+                        <TextBlock Text="{Binding Person.Age, StringFormat='VM.Age = {0}'}"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button Content="Сбросить" Command="{Binding ResetCommand}"/>
+                            <Button Content="Случайный возраст" Command="{Binding RandomizeAgeCommand}"
+                                    Style="{StaticResource AccentButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
