@@ -1,8 +1,65 @@
 <UserControl x:Class="WpfLab2.Views.OneTimeBindingView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <TextBlock Text="Одноразовая привязка (скелет)" Style="{StaticResource H1Text}"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:WpfLab2.ViewModels">
+    <UserControl.DataContext>
+        <vm:OneTimeBindingViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <TextBlock Text="Одноразовая привязка (Mode=OneTime)" Style="{StaticResource H1Text}"/>
+            <TextBlock Style="{StaticResource CaptionText}" TextWrapping="Wrap"
+                       Text="Значение копируется один раз при инициализации и больше не обновляется, даже если источник изменился."/>
+
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ЛЕВАЯ: прямая OneTime между элементами -->
+                <Border Style="{StaticResource ColumnCard}" Grid.Column="0">
+                    <StackPanel>
+                        <TextBlock Text="Прямая OneTime (ElementName)" Style="{StaticResource H2Text}"/>
+                        <TextBlock Text="Введите что-нибудь — снимок (OneTime) не обновится, а слепок (Default) — да."
+                                   TextWrapping="Wrap"/>
+
+                        <TextBox x:Name="SourceBox" Text="начальное значение"/>
+
+                        <TextBlock Text="OneTime (не обновляется):"/>
+                        <TextBlock Text="{Binding ElementName=SourceBox, Path=Text, Mode=OneTime}"
+                                   FontWeight="SemiBold" Foreground="{StaticResource AccentBrush}"/>
+
+                        <TextBlock Text="Default (обновляется):"/>
+                        <TextBlock Text="{Binding ElementName=SourceBox, Path=Text}"
+                                   FontWeight="SemiBold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ПРАВАЯ: OneTime через VM -->
+                <Border Style="{StaticResource ColumnCard}" Grid.Column="1">
+                    <StackPanel>
+                        <TextBlock Text="OneTime через ViewModel" Style="{StaticResource H2Text}"/>
+
+                        <TextBlock Text="Person.Name (OneTime — зафиксирован):"/>
+                        <TextBlock Text="{Binding Person.Name, Mode=OneTime}"
+                                   FontWeight="SemiBold" Foreground="{StaticResource AccentBrush}"/>
+
+                        <TextBlock Text="Person.Name (Default — обновляется):"/>
+                        <TextBlock Text="{Binding Person.Name}"
+                                   FontWeight="SemiBold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+
+                        <TextBlock Text="Редактирование:" Margin="4,10,4,4"/>
+                        <TextBox Text="{Binding Person.Name, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Button Content="Сменить имя через команду"
+                                Command="{Binding ChangeNameCommand}"
+                                Style="{StaticResource AccentButton}"
+                                Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
