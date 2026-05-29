@@ -1,8 +1,69 @@
 <UserControl x:Class="WpfLab2.Views.TwoWayBindingView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <TextBlock Text="Двухсторонняя привязка (скелет)" Style="{StaticResource H1Text}"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:WpfLab2.ViewModels">
+    <UserControl.DataContext>
+        <vm:TwoWayBindingViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <TextBlock Text="Двухсторонняя привязка (Mode=TwoWay)" Style="{StaticResource H1Text}"/>
+            <TextBlock Style="{StaticResource CaptionText}" TextWrapping="Wrap"
+                       Text="Изменение цели обновляет источник и наоборот. Также показана разница UpdateSourceTrigger: PropertyChanged, LostFocus, Explicit."/>
+
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ЛЕВАЯ: прямая TwoWay между элементами -->
+                <Border Style="{StaticResource ColumnCard}" Grid.Column="0">
+                    <StackPanel>
+                        <TextBlock Text="Прямая TwoWay (ElementName)" Style="{StaticResource H2Text}"/>
+                        <TextBlock Text="Два поля связаны TwoWay: изменение любого обновляет второе."/>
+
+                        <TextBlock Text="Поле A:" Margin="4,10,4,0"/>
+                        <TextBox x:Name="FieldA" Text="{Binding ElementName=FieldB, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Поле B:" Margin="4,8,4,0"/>
+                        <TextBox x:Name="FieldB" Text="привет"/>
+
+                        <TextBlock Text="CheckBox ↔ CheckBox (TwoWay):" Margin="4,14,4,0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox x:Name="CbA" Content="A" IsChecked="{Binding ElementName=CbB, Path=IsChecked, Mode=TwoWay}"/>
+                            <CheckBox x:Name="CbB" Content="B" Margin="16,4"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- ПРАВАЯ: TwoWay через VM + UpdateSourceTrigger -->
+                <Border Style="{StaticResource ColumnCard}" Grid.Column="1">
+                    <StackPanel>
+                        <TextBlock Text="TwoWay через ViewModel" Style="{StaticResource H2Text}"/>
+
+                        <TextBlock Text="Email (TwoWay, PropertyChanged):"/>
+                        <TextBox Text="{Binding Person.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="{Binding Person.Email, StringFormat='VM.Email = {0}'}"
+                                   Style="{StaticResource CaptionText}"/>
+
+                        <TextBlock Text="Имя (TwoWay, LostFocus — обновится после выхода из поля):" Margin="4,10,4,4" TextWrapping="Wrap"/>
+                        <TextBox Text="{Binding Person.Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                        <TextBlock Text="{Binding Person.Name, StringFormat='VM.Name = {0}'}"
+                                   Style="{StaticResource CaptionText}"/>
+
+                        <TextBlock Text="Роль (TwoWay, Explicit — только по кнопке):" Margin="4,10,4,4" TextWrapping="Wrap"/>
+                        <TextBox x:Name="RoleBox" Text="{Binding Person.Role, Mode=TwoWay, UpdateSourceTrigger=Explicit}"/>
+                        <TextBlock Text="{Binding Person.Role, StringFormat='VM.Role = {0}'}"
+                                   Style="{StaticResource CaptionText}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Применить роль" Click="ApplyRole_Click" Style="{StaticResource AccentButton}"/>
+                            <Button Content="Сбросить всё" Command="{Binding ResetCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
