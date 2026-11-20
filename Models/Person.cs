@@ -1,9 +1,8 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using WpfLab2.ViewModels;
 
 namespace WpfLab2.Models
 {
-    public class Person : INotifyPropertyChanged
+    public class Person : ObservableObject
     {
         private string _name = "Иван";
         private int _age = 20;
@@ -13,41 +12,82 @@ namespace WpfLab2.Models
 
         public string Name
         {
-            get => _name;
-            set => Set(ref _name, value);
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged("Name");
+                }
+            }
         }
 
         public int Age
         {
-            get => _age;
-            set => Set(ref _age, value);
+            get
+            {
+                return _age;
+            }
+            set
+            {
+                if (_age != value)
+                {
+                    _age = value;
+                    OnPropertyChanged("Age");
+                }
+            }
         }
 
         public string Email
         {
-            get => _email;
-            set => Set(ref _email, value);
+            get
+            {
+                return _email;
+            }
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged("Email");
+                }
+            }
         }
 
         public bool IsActive
         {
-            get => _isActive;
-            set => Set(ref _isActive, value);
+            get
+            {
+                return _isActive;
+            }
+            set
+            {
+                if (_isActive != value)
+                {
+                    _isActive = value;
+                    OnPropertyChanged("IsActive");
+                }
+            }
         }
 
         public string Role
         {
-            get => _role;
-            set => Set(ref _role, value);
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void Set<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (Equals(field, value)) return;
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get
+            {
+                return _role;
+            }
+            set
+            {
+                if (_role != value)
+                {
+                    _role = value;
+                    OnPropertyChanged("Role");
+                }
+            }
         }
     }
 }
